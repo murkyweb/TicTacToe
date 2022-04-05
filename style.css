@@ -1,0 +1,22 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+
+.game-board {
+    width: 600px;
+    height: 600px;
+    display: grid;
+    grid-template-columns: repeat(3, 200px);
+    grid-template-rows: repeat(3, 200px);
+}
+
+.game-board li {
+    list-style: none;
+    border: 1px solid black;
+    font-size: 5rem;
+    line-height: 2.5;
+    text-align: center;
+}
