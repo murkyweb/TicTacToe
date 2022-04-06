@@ -3,6 +3,7 @@ const playerFactory = (name, marker) => {
 }
 
 const Game = (function() {
+
     let gameBoard = ['', '', '', '', '', '', '', '', ''];
     let playerOne = playerFactory('Player1', 'X');
     let playerTwo = playerFactory('Player2', 'O');
@@ -10,13 +11,9 @@ const Game = (function() {
     let turns = 0;
     let gameResult = '';
 
-    const writeToDOM = (selector, message) => {
-        document.querySelector(selector).innerText = message;
-    }
-
     const renderBoard = () => {
         for (let i = 0; i < gameBoard.length; i++) {
-            writeToDOM(`li:nth-child(${i+1})`, gameBoard[i]);
+            displayController.writeToDOM(`li:nth-child(${i+1})`, gameBoard[i]);
         }
     }
 
@@ -38,25 +35,22 @@ const Game = (function() {
                 return true;
             } 
         }
-        return false;
     }
 
     const isGameOver = () => {
         turns++;
         if (checkWinConditions(currentPlayer.marker)) {
-            gameResult = `${currentPlayer.name} won!`;
-            showPopUp();
+            return gameResult = `${currentPlayer.name} won!`;
         }
         else if (turns === 9) {
-            gameResult = 'Tie.';
-            showPopUp();
+            return gameResult = 'Tie.';
         } else {
             changeTurn();
         }
     }
 
     const resetGame = () => {
-        showPopUp();
+        displayController.showPopUp();
         gameBoard = ['', '', '', '', '', '', '', '', ''];
         currentPlayer = playerOne;
         turns = 0;
@@ -71,29 +65,42 @@ const Game = (function() {
         }
     }
 
+    const playGame = (e) => {
+        let index = e.target.dataset.index;
+        if (gameBoard[index]) {
+            return;
+        }
+        gameBoard[index] = currentPlayer.marker;
+        renderBoard();
+        if (isGameOver()) {
+            displayController.showPopUp();
+            displayController.writeToDOM('.message', gameResult);
+        }
+    }
+
+    return { resetGame, playGame };
+})();
+
+
+const displayController = (function() {
+
+    const writeToDOM = (selector, message) => {
+        document.querySelector(selector).innerText = message;
+    }
+
     const showPopUp = () => {
         document.querySelector('.pop-up').classList.toggle('show');
         document.querySelector('.container').classList.toggle('hide');
-        writeToDOM('.message', `${gameResult}`);
     }
 
     document.addEventListener('click', (e) => {
         if (e.target.matches('li')) {
-            let index = e.target.dataset.index;
-            if (gameBoard[index]) {
-                return;
-            }
-            gameBoard[index] = currentPlayer.marker;
-            renderBoard();
-            isGameOver();
+           Game.playGame(e);
         }
     });
 
-    document.querySelector('.pop-up').addEventListener('click', resetGame);
+    document.querySelector('.pop-up').addEventListener('click', Game.resetGame);
 
-    return { writeToDOM, renderBoard };
+    return { writeToDOM, showPopUp };
 })();
-
-
-
 
