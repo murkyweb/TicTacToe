@@ -50,7 +50,6 @@ const Game = (function() {
     }
 
     const resetGame = () => {
-        displayController.showPopUp();
         gameBoard = ['', '', '', '', '', '', '', '', ''];
         currentPlayer = playerOne;
         turns = 0;
@@ -73,7 +72,8 @@ const Game = (function() {
         gameBoard[index] = currentPlayer.marker;
         renderBoard();
         if (isGameOver()) {
-            displayController.showPopUp();
+            displayController.togglePopUp();
+            displayController.toggleContainer();
             displayController.writeToDOM('.message', gameResult);
         }
     }
@@ -83,7 +83,7 @@ const Game = (function() {
         playerTwo.name = document.querySelector('#player-two').value;
     }
 
-    return { playerOne, playerTwo, resetGame, playGame, setPlayerNames };
+    return { resetGame, playGame, setPlayerNames };
 })();
 
 
@@ -93,9 +93,26 @@ const displayController = (function() {
         document.querySelector(selector).innerText = message;
     }
 
-    const showPopUp = () => {
-        document.querySelector('.pop-up').classList.toggle('show');
+    const togglePopUp = () => {
+        document.querySelector('.pop-up').classList.toggle('remove'); 
+        toggleResetButton();
+    }
+
+    const toggleContainer = () => {
         document.querySelector('.container').classList.toggle('hide');
+    }
+    
+    const toggleResetButton = () => {
+        document.querySelector('.restart-game').classList.toggle('remove');
+    }
+
+    const toggleStartGameButton = () => {
+        document.querySelector('.start-game').classList.toggle('remove');
+    }
+
+    const lockNameChanging = () => {
+        document.querySelector('#player-one').toggleAttribute('readonly');
+        document.querySelector('#player-two').toggleAttribute('readonly');
     }
 
     document.addEventListener('click', (e) => {
@@ -104,12 +121,25 @@ const displayController = (function() {
         }
         else if (e.target.matches('.new-game')) {
             Game.resetGame();
+            togglePopUp();
+            toggleContainer();
             Game.setPlayerNames();
+        }
+        else if (e.target.matches('.start-game')) {
+            Game.setPlayerNames();
+            lockNameChanging();
+            toggleContainer();
+            toggleStartGameButton();
+            toggleResetButton();
+        }
+        else if (e.target.matches('.restart-game')) {
+            Game.resetGame();
+            toggleContainer();
+            toggleResetButton();
+            toggleStartGameButton();
+            lockNameChanging();
         }
     });
 
-    return { writeToDOM, showPopUp };
+    return { writeToDOM, togglePopUp, toggleContainer };
 })();
-
-
-

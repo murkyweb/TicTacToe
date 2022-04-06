@@ -26,10 +26,6 @@ body {
 }
 
 .pop-up {
-    display: none;
-}
-
-.show {
     display: flex;
     flex-direction: column;
     position: fixed;
@@ -43,4 +39,8 @@ body {
 
 .hide {
     pointer-events: none;
+}
+
+.remove {
+    display: none;
 }
