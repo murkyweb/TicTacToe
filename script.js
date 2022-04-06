@@ -78,7 +78,12 @@ const Game = (function() {
         }
     }
 
-    return { resetGame, playGame };
+    const setPlayerNames = () => {
+        playerOne.name = document.querySelector('#player-one').value;
+        playerTwo.name = document.querySelector('#player-two').value;
+    }
+
+    return { playerOne, playerTwo, resetGame, playGame, setPlayerNames };
 })();
 
 
@@ -95,12 +100,16 @@ const displayController = (function() {
 
     document.addEventListener('click', (e) => {
         if (e.target.matches('li')) {
-           Game.playGame(e);
+            Game.playGame(e);
+        }
+        else if (e.target.matches('.new-game')) {
+            Game.resetGame();
+            Game.setPlayerNames();
         }
     });
 
-    document.querySelector('.pop-up').addEventListener('click', Game.resetGame);
-
     return { writeToDOM, showPopUp };
 })();
+
+
 
