@@ -40,7 +40,7 @@ const Game = (function() {
     const isGameOver = () => {
         turns++;
         if (checkWinConditions(currentPlayer.marker)) {
-            return gameResult = `${currentPlayer.name} won!`;
+            return gameResult = `${currentPlayer.name} (${currentPlayer.marker}) won!`;
         }
         else if (turns === 9) {
             return gameResult = 'Tie.';
@@ -73,7 +73,7 @@ const Game = (function() {
         renderBoard();
         if (isGameOver()) {
             displayController.togglePopUp();
-            displayController.toggleContainer();
+            displayController.toggleGameBoard();
             displayController.writeToDOM('.message', gameResult);
         }
     }
@@ -94,12 +94,13 @@ const displayController = (function() {
     }
 
     const togglePopUp = () => {
-        document.querySelector('.pop-up').classList.toggle('remove'); 
+        document.querySelector('.pop-up').classList.toggle('remove');
+        document.querySelector('.mask').classList.toggle('active'); 
         toggleResetButton();
     }
 
-    const toggleContainer = () => {
-        document.querySelector('.container').classList.toggle('hide');
+    const toggleGameBoard = () => {
+        document.querySelector('.game-board').classList.toggle('hide');
     }
     
     const toggleResetButton = () => {
@@ -122,24 +123,24 @@ const displayController = (function() {
         else if (e.target.matches('.new-game')) {
             Game.resetGame();
             togglePopUp();
-            toggleContainer();
+            toggleGameBoard();
             Game.setPlayerNames();
         }
         else if (e.target.matches('.start-game')) {
             Game.setPlayerNames();
             lockNameChanging();
-            toggleContainer();
+            toggleGameBoard();
             toggleStartGameButton();
             toggleResetButton();
         }
         else if (e.target.matches('.restart-game')) {
             Game.resetGame();
-            toggleContainer();
+            toggleGameBoard();
             toggleResetButton();
             toggleStartGameButton();
             lockNameChanging();
         }
     });
 
-    return { writeToDOM, togglePopUp, toggleContainer };
+    return { writeToDOM, togglePopUp, toggleGameBoard };
 })();

@@ -11,12 +11,16 @@
 <body>
     <div class="pop-up remove">
         <p class="message"></p>
-        <button type="button" class="new-game">New Game</button>
+        <button type="button" class="new-game">Play again</button>
     </div>
-    <input type="text" name="player-one" id="player-one" value="Player1">
-    <input type="text" name="player-two" id="player-two" value="Player2">
-    <div class="container hide">
-        <ul class="game-board">
+    
+    <div class="container">
+        <h3 class="header">Tic Tac Toe</h3>
+        <div class="player-names">
+            <input type="text" name="player-one" id="player-one" value="Player1">
+            <input type="text" name="player-two" id="player-two" value="Player2">
+        </div>
+        <ul class="game-board hide">
             <li data-index="0"></li>
             <li data-index="1"></li>
             <li data-index="2"></li>
@@ -27,8 +31,9 @@
             <li data-index="7"></li>
             <li data-index="8"></li>
         </ul>
+        <button type="button" class="start-game">Start Game</button>
+        <button type="button" class="restart-game remove">Restart</button>
+        <div class="mask"></div>
     </div>
-    <button type="button" class="start-game">Start Game</button>
-    <button type="button" class="restart-game remove">Restart</button>
 </body>
 </html>
